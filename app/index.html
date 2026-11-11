@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Pulse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">P</div>
+          <div>
+            <p class="eyebrow">Portfolio overview</p>
+            <h1>Project Pulse</h1>
+          </div>
+        </div>
+        <button class="header-action" type="button">Updated today</button>
+      </header>
+
+      <main class="dashboard">
+        <section class="summary-grid" aria-label="Project summary">
+          <article class="summary-card highlight">
+            <p class="summary-label">Active projects</p>
+            <h2 id="active-count">0</h2>
+            <span class="trend positive">+2 this quarter</span>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label">On track</p>
+            <h2 id="on-track-count">0</h2>
+            <span class="trend positive">Healthy momentum</span>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label">Needs attention</p>
+            <h2 id="attention-count">0</h2>
+            <span class="trend warning">Watch closely</span>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label">High priority</p>
+            <h2 id="high-priority-count">0</h2>
+            <span class="trend warning">Escalate if needed</span>
+          </article>
+        </section>
+
+        <section class="projects-panel" aria-labelledby="portfolio-header">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Project health</p>
+              <h2 id="portfolio-header">Portfolio spotlight</h2>
+            </div>
+            <span class="panel-caption">Priority across the delivery pipeline</span>
+          </div>
+
+          <div id="project-grid" class="project-grid" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const fallbackProjects = [
+        {
+          name: "Atlas CRM",
+          owner: "Maya Chen",
+          status: "On Track",
+          recentActivity: "Launch checklist signed off; onboarding metrics are trending upward.",
+          priority: "High"
+        },
+        {
+          name: "Northstar Analytics",
+          owner: "Leo Park",
+          status: "Needs attention",
+          recentActivity: "Data sync delays have been resolved, but stakeholder sign-off is still pending.",
+          priority: "Medium"
+        },
+        {
+          name: "Harbor Ops",
+          owner: "Priya Shah",
+          status: "At Risk",
+          recentActivity: "QA backlog is blocking the release, and the milestone has slipped by a week.",
+          priority: "High"
+        },
+        {
+          name: "Luna Support",
+          owner: "Noah Kim",
+          status: "In Review",
+          recentActivity: "Reply templates shipped and the customer feedback loop has reopened for review.",
+          priority: "Medium"
+        },
+        {
+          name: "Beacon Labs",
+          owner: "Alicia Gomez",
+          status: "On Track",
+          recentActivity: "Prototype feedback was positive and the pilot expansion roadmap is aligned.",
+          priority: "Low"
+        }
+      ];
+
+      const statusClassMap = {
+        "On Track": "status-on-track",
+        "Needs attention": "status-needs-attention",
+        "At Risk": "status-at-risk",
+        "In Review": "status-in-review"
+      };
+
+      const priorityClassMap = {
+        High: "priority-high",
+        Medium: "priority-medium",
+        Low: "priority-low"
+      };
+
+      function formatStatusClass(status) {
+        return statusClassMap[status] || "status-on-track";
+      }
+
+      function formatPriorityClass(priority) {
+        return priorityClassMap[priority] || "priority-medium";
+      }
+
+      function updateSummary(projects) {
+        const activeCount = projects.length;
+        const onTrackCount = projects.filter((project) => project.status === "On Track").length;
+        const attentionCount = projects.filter((project) => project.status === "Needs attention" || project.status === "At Risk").length;
+        const highPriorityCount = projects.filter((project) => project.priority === "High").length;
+
+        document.getElementById("active-count").textContent = String(activeCount);
+        document.getElementById("on-track-count").textContent = String(onTrackCount);
+        document.getElementById("attention-count").textContent = String(attentionCount);
+        document.getElementById("high-priority-count").textContent = String(highPriorityCount);
+      }
+
+      function renderProjects(projects) {
+        const grid = document.getElementById("project-grid");
+        grid.innerHTML = projects
+          .map((project) => {
+            const statusClass = formatStatusClass(project.status);
+            const priorityClass = formatPriorityClass(project.priority);
+
+            return `
+              <article class="project-card">
+                <div class="project-topline">
+                  <div>
+                    <h3 class="project-name">${project.name}</h3>
+                    <p class="project-owner">Owner: ${project.owner}</p>
+                  </div>
+                  <span class="badge ${statusClass}">${project.status}</span>
+                </div>
+
+                <p class="project-copy">${project.recentActivity}</p>
+
+                <div class="project-meta">
+                  <span class="meta-label">Priority</span>
+                  <span class="priority-pill ${priorityClass}">${project.priority}</span>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      function loadProjects() {
+        return fetch("project-data.json")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Project data could not be loaded.");
+            }
+            return response.json();
+          })
+          .then((data) => data.projects || fallbackProjects)
+          .catch(() => fallbackProjects);
+      }
+
+      loadProjects().then((projects) => {
+        renderProjects(projects);
+        updateSummary(projects);
+      });
+    </script>
+  </body>
+</html>

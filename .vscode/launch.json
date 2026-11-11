@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Project Pulse Dashboard",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "cd \"${workspaceFolder}/app\" && (python3 -m http.server 8000 >/tmp/project-pulse-dashboard.log 2>&1 &) && python3 -m webbrowser http://localhost:8000/index.html",
+      "cwd": "${workspaceFolder}/app",
+      "console": "integratedTerminal"
+    }
+  ]
+}

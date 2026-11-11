@@ -1,0 +1,39 @@
+{
+  "projects": [
+    {
+      "name": "Atlas CRM",
+      "owner": "Maya Chen",
+      "status": "On Track",
+      "recentActivity": "Launch checklist signed off; onboarding metrics are trending upward.",
+      "priority": "High"
+    },
+    {
+      "name": "Northstar Analytics",
+      "owner": "Leo Park",
+      "status": "Needs attention",
+      "recentActivity": "Data sync delays have been resolved, but stakeholder sign-off is still pending.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Harbor Ops",
+      "owner": "Priya Shah",
+      "status": "At Risk",
+      "recentActivity": "QA backlog is blocking the release, and the milestone has slipped by a week.",
+      "priority": "High"
+    },
+    {
+      "name": "Luna Support",
+      "owner": "Noah Kim",
+      "status": "In Review",
+      "recentActivity": "Reply templates shipped and the customer feedback loop has reopened for review.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Beacon Labs",
+      "owner": "Alicia Gomez",
+      "status": "On Track",
+      "recentActivity": "Prototype feedback was positive and the pilot expansion roadmap is aligned.",
+      "priority": "Low"
+    }
+  ]
+}
